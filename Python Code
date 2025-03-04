@@ -1,0 +1,11 @@
+import serial
+
+# Set up the serial connection (use your actual port)
+ser = serial.Serial('/dev/cu.usbmodem113101', 9600)  # Adjust baud rate if needed
+
+while True:
+    if ser.in_waiting > 0:  # Check if data is available
+        line = ser.readline().decode('utf-8').strip()  # Read and decode the line
+        print(line)  # Print the output from Arduino
+
+
