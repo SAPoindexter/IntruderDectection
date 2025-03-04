@@ -1,0 +1,49 @@
+// Pin Assignments
+int led = 13;         // LED pin
+int sensor = 2;       // PIR motion sensor pin
+int buzzerPin = 6;    // Buzzer pin
+int state = LOW;      // Motion state (LOW = no motion)
+int val = 0;          // PIR sensor value
+
+void setup() {
+  pinMode(led, OUTPUT);
+  pinMode(sensor, INPUT);
+  pinMode(buzzerPin, OUTPUT);
+  Serial.begin(9600); // Start serial communication
+}
+
+void loop() {
+  val = digitalRead(sensor);  // Reads the PIR sensor
+
+  if (val == HIGH) {  // If motion is detected
+   
+    if (state == LOW) {  // checks if motion was previously not detected
+      Serial.println("Motion detected!");
+      state = HIGH; // updates the motion state
+    }
+
+    for (int i = 0; i < 5; i++) { 
+      digitalWrite(led, HIGH);
+      tone(buzzerPin, 1000);
+      delay(150);
+      tone(buzzerPin, 1500);
+      digitalWrite(led, LOW);  
+      delay(150);
+
+        
+  
+    }
+
+  } else {  // If no motion is detected
+    digitalWrite(led, LOW);  // turns the LED OFF
+
+    if (state == HIGH) {  // if motion was previously detected
+      Serial.println("Motion stopped.");
+      state = LOW; // updates the motion state
+    }
+
+    noTone(buzzerPin);  // ensures the buzzer stops
+  }
+
+  delay(100);  // small delay to stop rapid flickering
+}
